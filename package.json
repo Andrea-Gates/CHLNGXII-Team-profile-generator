@@ -1,0 +1,24 @@
+{
+  "name": "team-profile-generator",
+  "version": "1.0.0",
+  "description": "Node.js CL app to take info on employees of fictional software engineering team",
+  "main": "index.js",
+  "scripts": {
+    "test": "from CLI"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andrea-Gates/CHLNGXII-Team-profile-generator.git"
+  },
+  "keywords": [
+    "Team",
+    "Profile",
+    "Generator"
+  ],
+  "author": "Andrea Gates",
+  "license": "MIT-open-group",
+  "bugs": {
+    "url": "https://github.com/Andrea-Gates/CHLNGXII-Team-profile-generator/issues"
+  },
+  "homepage": "https://github.com/Andrea-Gates/CHLNGXII-Team-profile-generator#readme"
+}
