@@ -1,152 +1,153 @@
-const Manager = require("../lib/Manager");
-const Employee = require("../lib/Employee")
-const Engineer = require("../lib/Engineer");
-const Intern = require("../lib/Intern");
-const inquirer = require("inquirer");
-const path = require("path");
-const fs = require("fs");
+// Import required packages (classes)
+import inquirer from "inquirer";
+import fs from "fs";
+import generateHTML from "./src/generateHTML.js";
+import Manager from "./lib/Manager.js";
+import Engineer from "./lib/Engineer.js";
+import Intern from "./lib/Intern.js";
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
-
-const render = require("../page-template.js");
-
-// TODO: Write Code to gather information about the development team members, and render the HTML file.
-const teamMembers = [];
-
-function start() {
-  managerQuery();
-}
-
-function managerQuery() {
-  inquirer
-    .prompt([
+// Function to prompt user for manager's information
+async function main() {
+  try {
+    // Ask for team manager information
+    const managerQuestions = [
       {
         type: "input",
+        message: "What is the team manager's name?",
         name: "name",
-        message: "What is the name of the team manager?",
       },
       {
         type: "input",
+        message: "What is the team manager's ID?",
         name: "id",
-        message: "Team Manager's ID number:",
       },
       {
         type: "input",
+        message: "What is the team manager's email address?",
         name: "email",
-        message: "Team Manager's email address:",
       },
       {
         type: "input",
+        message: "What is the team manager's office number?",
         name: "officeNumber",
-        message: "Team Manager's office number:",
       },
-    ])
-    .then((val) => {
-      const manager = new Manager(
-        val.name,
-        val.id,
-        val.email,
-        val.officeNumber
-      );
-      console.table(manager);
-      teamMembers.push(manager);
-      addTeamMember();
-    });
-}
+    ];
 
-function addTeamMember() {
-  inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "what_type",
-        message: "Add an engineer or intern to the team?",
-        choices: ["Engineer", "Intern", "Not at this time"],
-      },
-    ])
-    .then((val) => {
-      if (val.what_type === "Engineer") {
-        engineerQuery();
-      } else if (val.what_type === "Intern") {
-        internQuery();
-      } else {
-        createFile();
+    const { name, id, email, officeNumber } = await inquirer.prompt(
+      managerQuestions
+    );
+    const teamManager = new Manager(name, id, email, officeNumber);
+
+    // Ask for team member information until user chooses to finish
+    const teamMembers = [];
+    let addMoreMembers = true;
+
+    while (addMoreMembers) {
+      const memberQuestions = [
+        {
+          type: "list",
+          message: "Which type of team member do you want to add?",
+          name: "memberType",
+          choices: [
+            "Engineer",
+            "Intern",
+            "I don't want to add any more team members",
+          ],
+        },
+      ];
+
+      const { memberType } = await inquirer.prompt(memberQuestions);
+
+      switch (memberType) {
+        case "Engineer":
+          const engineerQuestions = [
+            {
+              type: "input",
+              message: "What is the engineer's name?",
+              name: "name",
+            },
+            {
+              type: "input",
+              message: "What is the engineer's ID?",
+              name: "id",
+            },
+            {
+              type: "input",
+              message: "What is the engineer's email address?",
+              name: "email",
+            },
+            {
+              type: "input",
+              message: "What is the engineer's GitHub username?",
+              name: "github",
+            },
+          ];
+
+          const {
+            name: engineerName,
+            id: engineerId,
+            email: engineerEmail,
+            github,
+          } = await inquirer.prompt(engineerQuestions);
+          const engineer = new Engineer(
+            engineerName,
+            engineerId,
+            engineerEmail,
+            github
+          );
+          teamMembers.push(engineer);
+          break;
+
+        case "Intern":
+          const internQuestions = [
+            {
+              type: "input",
+              message: "What is the intern's name?",
+              name: "name",
+            },
+            {
+              type: "input",
+              message: "What is the intern's ID?",
+              name: "id",
+            },
+            {
+              type: "input",
+              message: "What is the intern's email address?",
+              name: "email",
+            },
+            {
+              type: "input",
+              message: "What school does the intern attend?",
+              name: "school",
+            },
+          ];
+
+          const {
+            name: internName,
+            id: internId,
+            email: internEmail,
+            school,
+          } = await inquirer.prompt(internQuestions);
+          const intern = new Intern(internName, internId, internEmail, school);
+          teamMembers.push(intern);
+          break;
+
+        default:
+          // If user chooses to finish adding team, generate HTML and write to file
+
+          addMoreMembers = false;
+          const html = generateHTML(teamManager, teamMembers);
+          fs.writeFile("./dist/index.html", html, (err) => {
+            if (err) throw err;
+            console.log("HTML file generated successfully!");
+          });
+          break;
       }
-    });
-}
-
-function engineerQuery() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "name",
-        message: "Engineer's name?",
-      },
-      {
-        type: "input",
-        name: "id",
-        message: "Engineer's ID number:",
-      },
-      {
-        type: "input",
-        name: "email",
-        message: "Engineer's email address:",
-      },
-      {
-        type: "input",
-        name: "github",
-        message: "What is the Engineer's GitHub Username?",
-      },
-    ])
-    .then((val) => {
-      const engineer = new Engineer(val.name, val.id, val.email, val.github);
-      console.table(engineer);
-      teamMembers.push(engineer);
-      addTeamMember();
-    });
-}
-
-function internQuery() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "name",
-        message: "Intern's name?",
-      },
-      {
-        type: "input",
-        name: "id",
-        message: "Intern's ID number:",
-      },
-      {
-        type: "input",
-        name: "email",
-        message: "Intern's email address:",
-      },
-      {
-        type: "input",
-        name: "school",
-        message: "What school does/did the intern attend?",
-      },
-    ])
-    .then((val) => {
-      const intern = new Intern(val.name, val.id, val.email, val.school);
-      console.table(intern);
-      teamMembers.push(intern);
-      addTeamMember();
-    });
-}
-
-function createFile() {
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR);
-  } else {
-    fs.writeFileSync(outputPath, render(teamMembers), "UTF-8");
-    console.log("File created in the output folder");
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
-start();
+// Call main function to start program
+main();
