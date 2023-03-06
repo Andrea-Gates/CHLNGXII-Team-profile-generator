@@ -1,10 +1,11 @@
 // Import required packages and classes
 const inquirer = require("inquirer");
+
 const fs = require("fs");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const generateTeamHTML = require("./src/generateHTML");
+const generateTeamHTML = require("./src/page-template");
 
 // Define function to ask questions about the team manager
 function askManagerQuestions() {
@@ -178,3 +179,5 @@ async function runApp() {
   // Call the function to run the application
   runApp();
 }
+
+runApp();
