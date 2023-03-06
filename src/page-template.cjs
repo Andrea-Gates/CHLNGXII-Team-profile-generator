@@ -1,9 +1,8 @@
 // creates the team
-export default class generateTeam {}
-
-// creates the manager html
-const generateManager = (manager) => {
-  return `
+const generateTeam = (team) => {
+  // creates the manager html
+  const generateManager = (manager) => {
+    return `
         <div class="card employee-card">
         <div class="card-header">
             <h2 class="card-title">${manager.getName()}</h2>
@@ -18,11 +17,11 @@ const generateManager = (manager) => {
         </div>
     </div>
         `;
-};
+  };
 
-// creates the html for engineers
-const generateEngineer = (engineer) => {
-  return `
+  // creates the html for engineers
+  const generateEngineer = (engineer) => {
+    return `
         <div class="card employee-card">
     <div class="card-header">
         <h2 class="card-title">${engineer.getName()}</h2>
@@ -37,11 +36,11 @@ const generateEngineer = (engineer) => {
     </div>
 </div>
         `;
-};
+  };
 
-// creates the html for interns
-const generateIntern = (intern) => {
-  return `
+  // creates the html for interns
+  const generateIntern = (intern) => {
+    return `
         <div class="card employee-card">
     <div class="card-header">
         <h2 class="card-title">${intern.getName()}</h2>
@@ -56,29 +55,30 @@ const generateIntern = (intern) => {
     </div>
 </div>
         `;
+  };
+
+  const html = [];
+
+  html.push(
+    team
+      .filter((employee) => employee.getRole() === "Manager")
+      .map((manager) => generateManager(manager))
+  );
+  html.push(
+    team
+      .filter((employee) => employee.getRole() === "Engineer")
+      .map((engineer) => generateEngineer(engineer))
+      .join("")
+  );
+  html.push(
+    team
+      .filter((employee) => employee.getRole() === "Intern")
+      .map((intern) => generateIntern(intern))
+      .join("")
+  );
+
+  return html.join("");
 };
-
-const html = [];
-
-html.push(
-  team
-    .filter((employee) => employee.getRole() === "Manager")
-    .map((manager) => generateManager(manager))
-);
-html.push(
-  team
-    .filter((employee) => employee.getRole() === "Engineer")
-    .map((engineer) => generateEngineer(engineer))
-    .join("")
-);
-html.push(
-  team
-    .filter((employee) => employee.getRole() === "Intern")
-    .map((intern) => generateIntern(intern))
-    .join("")
-);
-
-return html.join("");
 
 // exports function to generate entire page
 module.exports = (team) => {
