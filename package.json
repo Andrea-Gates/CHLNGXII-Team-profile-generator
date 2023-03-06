@@ -4,11 +4,11 @@
   "description": "Node.js CL app to take info on employees of fictional software engineering team",
   "main": "index.js",
   "scripts": {
-    "test": "from CLI"
+    "jest": "from CLI"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Andrea-Gates/CHLNGXII-Team-profile-generator.git"
+    "url": "git+https://github.com/Andrea-Gates/Team-Profile-Generator.git"
   },
   "keywords": [
     "Team",
@@ -16,9 +16,18 @@
     "Generator"
   ],
   "author": "Andrea Gates",
-  "license": "MIT-open-group",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Andrea-Gates/CHLNGXII-Team-profile-generator/issues"
+    "url": "https://github.com/Andrea-Gates/Team-Profile-Generator/issues"
   },
-  "homepage": "https://github.com/Andrea-Gates/CHLNGXII-Team-profile-generator#readme"
+  "homepage": "https://github.com/Andrea-Gates/Team-Profile-Generator#readme",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "inquirer": "^9.1.4"
+  },
+  "devDependencies": {
+    "jest": "^29.4.3"
+  }
 }
